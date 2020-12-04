@@ -2,21 +2,26 @@ const minWidth = 100;
 const slider = document.getElementById("slider");
 
 let targetWidth = minWidth;
-let upperThreshold = minWidth * 0.8;
+let upperThreshold = minWidth * 0.80;
 let lowerThreshold = minWidth * 0.79;
 let lastValue = 50;
 
 slider.style.width = minWidth.toString() + "px";
 slider.addEventListener('input', alwaysOutOfReach);
 
+function slowlyApproachesZero(x) {
+    return 1.0 / (0.01 * x + 1.0);
+}
+
 function alwaysOutOfReach(e) {
     const value = parseInt(e.target.value);
     const currentWidth = parseInt(slider.style.width.split("px")[0]);
+    const dist = Math.abs(currentWidth - minWidth);
     const increasing = value > lastValue && value > upperThreshold;
     const decreasing = value < lastValue && value < lowerThreshold;
     
     if (increasing) {
-        targetWidth = Math.ceil(value * 1.25);
+        targetWidth = Math.ceil(value * (1 + 0.25 * slowlyApproachesZero(dist)));
         targetWidth = Math.max(targetWidth, currentWidth);
     }
 
