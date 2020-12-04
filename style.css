@@ -1,0 +1,7 @@
+body {
+    background: ivory;
+}
+
+input[type="range"] {
+    display: inline-block;
+}
